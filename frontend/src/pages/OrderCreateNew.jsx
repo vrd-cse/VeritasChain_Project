@@ -160,7 +160,7 @@ export function OrderCreatePage() {
                 <div>
                   <label className="block text-white/80 text-sm font-medium mb-2">Supplier</label>
                   <div className="bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm text-white/70">
-                    {selectedChannelData.supplierOrgId?.name} ({selectedChannelData.supplierOrgId?.mspId})
+                    {selectedChannelData.supplierOrgId?.name} 
                   </div>
                 </div>
               )}
@@ -170,7 +170,7 @@ export function OrderCreatePage() {
                 <label className="block text-white/80 text-sm font-medium mb-2">Component Type *</label>
                 <GlassmorphicInput
                   type="text"
-                  placeholder="e.g. Lithium Battery, Semiconductor"
+                  placeholder="Enter component type"
                   value={formData.componentType}
                   onChange={e => { setFormData(p => ({ ...p, componentType: e.target.value })); setErrors(p => ({ ...p, componentType: '' })); }}
                   error={!!errors.componentType}
@@ -195,7 +195,7 @@ export function OrderCreatePage() {
               <div>
                 <label className="block text-white/80 text-sm font-medium mb-2">Specifications *</label>
                 <GlassmorphicTextarea
-                  placeholder="Detailed specifications, requirements, standards…"
+                  placeholder="Enter detailed specifications, requirements, standards…"
                   value={formData.specifications}
                   onChange={e => { setFormData(p => ({ ...p, specifications: e.target.value })); setErrors(p => ({ ...p, specifications: '' })); }}
                   error={!!errors.specifications}

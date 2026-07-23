@@ -19,6 +19,12 @@ router.post('/register', async (req, res) => {
         error: 'All fields required: name, type, whatTheyMake, address, contact, email, password, confirmPassword',
       });
     }
+    const { street, city, state, country } = address || {};
+    if (!street || !String(street).trim() || !city || !String(city).trim() || !state || !String(state).trim() || !country || !String(country).trim()) {
+      return res.status(400).json({
+        error: 'Address must include street, city, state, and country',
+      });
+    }
 
     // Validate password
     if (password.length < 8) {
@@ -76,7 +82,12 @@ router.post('/register', async (req, res) => {
       slug,
       type,
       whatTheyMake,
-      address,
+      address: {
+        street: String(street).trim(),
+        city: String(city).trim(),
+        state: String(state).trim(),
+        country: String(country).trim(),
+      },
       contact,
       email: normalizedEmail,
       passwordHash,

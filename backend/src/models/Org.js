@@ -26,8 +26,10 @@ const OrgSchema = new mongoose.Schema({
     required: true,
   },
   address: {
-    type: String,
-    required: true,
+    street: { type: String, required: true, trim: true },
+    city: { type: String, required: true, trim: true },
+    state: { type: String, required: true, trim: true },
+    country: { type: String, required: true, trim: true },
   },
   contact: {
     type: String,

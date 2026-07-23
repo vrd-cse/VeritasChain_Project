@@ -30,7 +30,10 @@ export function RegisterPage() {
     name: '',
     type: '',
     whatTheyMake: '',
-    address: '',
+    street: '',
+    city: '',
+    state: '',
+    country: '',
     contact: '',
     email: '',
     password: '',
@@ -51,7 +54,10 @@ export function RegisterPage() {
       if (!formData.name.trim()) newErrors.name = 'Organization name is required';
       if (!formData.type) newErrors.type = 'Organization type is required';
       if (!formData.whatTheyMake.trim()) newErrors.whatTheyMake = 'Please describe what you make/provide';
-      if (!formData.address.trim()) newErrors.address = 'Address is required';
+      if (!formData.street.trim()) newErrors.street = 'Street address is required';
+      if (!formData.city.trim()) newErrors.city = 'City is required';
+      if (!formData.state.trim()) newErrors.state = 'State is required';
+      if (!formData.country.trim()) newErrors.country = 'Country is required';
     }
 
     if (step === 2) {
@@ -90,7 +96,12 @@ export function RegisterPage() {
     setLoading(true);
 
     try {
-      const response = await authService.register(formData);
+      const { street, city, state, country, ...rest } = formData;
+      const payload = {
+        ...rest,
+        address: { street, city, state, country },
+      };
+      const response = await authService.register(payload);
       success('Registration successful! Your organization is being set up.');
       localStorage.setItem('pendingOrgId', response.data.orgId);
       navigate('/org-setup-progress', {
@@ -120,7 +131,7 @@ export function RegisterPage() {
               </label>
               <GlassmorphicInput
                 type="text"
-                placeholder="e.g., Acme Manufacturing"
+                placeholder="Enter your organization name"
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
                 error={!!errors.name}
@@ -160,15 +171,59 @@ export function RegisterPage() {
 
             <div>
               <label className="block text-white/80 text-sm font-medium mb-2">
-                Registered Office Address *
+                Street Address *
               </label>
               <GlassmorphicInput
                 type="text"
-                placeholder="e.g. 123 Business Avenue, Bengaluru, Karnataka 560001"
-                value={formData.address}
-                onChange={(e) => handleInputChange('address', e.target.value)}
-                error={!!errors.address}
-                errorMessage={errors.address}
+                placeholder="Enter Street Address"
+                value={formData.street}
+                onChange={(e) => handleInputChange('street', e.target.value)}
+                error={!!errors.street}
+                errorMessage={errors.street}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-white/80 text-sm font-medium mb-2">
+                  City *
+                </label>
+                <GlassmorphicInput
+                  type="text"
+                  placeholder="Enter City"
+                  value={formData.city}
+                  onChange={(e) => handleInputChange('city', e.target.value)}
+                  error={!!errors.city}
+                  errorMessage={errors.city}
+                />
+              </div>
+
+              <div>
+                <label className="block text-white/80 text-sm font-medium mb-2">
+                  State *
+                </label>
+                <GlassmorphicInput
+                  type="text"
+                  placeholder="Enter State"
+                  value={formData.state}
+                  onChange={(e) => handleInputChange('state', e.target.value)}
+                  error={!!errors.state}
+                  errorMessage={errors.state}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-white/80 text-sm font-medium mb-2">
+                Country *
+              </label>
+              <GlassmorphicInput
+                type="text"
+                placeholder="Enter Country"
+                value={formData.country}
+                onChange={(e) => handleInputChange('country', e.target.value)}
+                error={!!errors.country}
+                errorMessage={errors.country}
               />
             </div>
           </motion.div>
@@ -189,7 +244,7 @@ export function RegisterPage() {
               </label>
               <GlassmorphicInput
                 type="tel"
-                placeholder="+1 (555) 000-0000"
+                placeholder="Enter Contact Number"
                 value={formData.contact}
                 onChange={(e) => handleInputChange('contact', e.target.value)}
                 error={!!errors.contact}
@@ -203,7 +258,7 @@ export function RegisterPage() {
               </label>
               <GlassmorphicInput
                 type="email"
-                placeholder="your@email.com"
+                placeholder="Enter Email Address"
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
                 error={!!errors.email}
@@ -268,7 +323,12 @@ export function RegisterPage() {
               <ReviewField label="Organization Name" value={formData.name} />
               <ReviewField label="Type" value={formData.type} />
               <ReviewField label="Description" value={formData.whatTheyMake} />
-              <ReviewField label="Registered Office Address" value={formData.address} />
+              <ReviewField
+                label="Registered Office Address"
+                value={[formData.street, formData.city, formData.state, formData.country]
+                  .filter(Boolean)
+                  .join(', ')}
+              />
               <ReviewField label="Contact" value={formData.contact} />
               <ReviewField label="Email" value={formData.email} />
             </div>
